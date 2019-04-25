@@ -1,0 +1,15 @@
+# Unignore self
+!*.gitignore
+
+# Unignore all dirs
+!*/
+
+# Ignore IntelliJ IDEA
+.idea
+
+# Ignore VS Files
+.vs/
+
+# Ignore Enviroment in folder
+venv/
+
