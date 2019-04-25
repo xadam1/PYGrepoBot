@@ -4,6 +4,9 @@ from random import randint
 
 
 def collect_resources_on_island():
+    # get type of farming (1 = 5 mins, 2 = 10 mins)
+    collect_type = int(input("Farm every 5 mins [1] / 10 mins [2]: "))
+
     print("Please select active Grepolis window!")
 
     time.sleep(3)
@@ -16,10 +19,10 @@ def collect_resources_on_island():
     pyautogui.click('images/resources.png')
     print("Found village with resources.")
 
-    btn_10min_collect, btn_next_village = get_cords_of_btns()
+    btn_collect, btn_next_village = get_cords_of_btns(collect_type)
 
     for _ in range(6):
-        pyautogui.click(btn_10min_collect)
+        pyautogui.click(btn_collect)
         print("Collected goodies for 10min.")
         time.sleep(randint(1, 2))
 
@@ -31,13 +34,16 @@ def collect_resources_on_island():
     print("Collected from all villages on this island.")
 
 
-def get_cords_of_btns():
-    # get location of picture 10min_collect
-    location_of_10min_collect = pyautogui.locateOnScreen('images/10min_farm_village_button.png')
+def get_cords_of_btns(collect_type):
+    # 1 = 5 min, 2 = 10 min
+    collect_dict = {1: 'images/5min_farm_village_button.png', 2: 'images/10min_farm_village_button.png'}
+
+    # get location of picture collect
+    location_of_collect = pyautogui.locateOnScreen(collect_dict[collect_type])
 
     # convert to x,y format
-    btn_10min_collect = pyautogui.center(location_of_10min_collect)
-    print("10min btn found: ", btn_10min_collect)
+    btn_collect = pyautogui.center(location_of_collect)
+    print("collect btn found: ", btn_collect)
 
     # get location of picture next_arrow_farm_village
     location_of_next_village_btn = pyautogui.locateOnScreen('images/next_farm_village_button.png')
@@ -46,7 +52,7 @@ def get_cords_of_btns():
     btn_next_village = pyautogui.center(location_of_next_village_btn)
     print("Next village btn found: ", btn_next_village)
 
-    return btn_10min_collect, btn_next_village
+    return btn_collect, btn_next_village
 
 
 """
