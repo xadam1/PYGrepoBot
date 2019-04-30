@@ -13,3 +13,4 @@
 # Ignore Enviroment in folder
 venv/
 
+.DS_Store

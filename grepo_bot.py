@@ -4,6 +4,11 @@ import random
 
 
 def get_cities():
+    """
+    Gets input from user - number of cities per each island
+
+    :return: list of number of cities per island, each element represents one island
+    """
     island_num = 1
     print("You will be asked to input number of cities on each of your islands.\n"
           "GrepoBot needs this information to be able to loop over all villages.\n\n"
@@ -37,7 +42,23 @@ def get_cities():
     return cities_per_island
 
 
-# def collect_countdown_loop(time):
+def collect_countdown_loop(cities_on_island):
+    # collect, move to other island, wait 11 mins
+
+    while True:
+        for island in cities_on_island:
+            # collect on this island
+            collect_resources_on_island(1)
+
+            print("Moving to another island!\n")
+            # switch to other island
+            for _ in range(island):
+                pyautogui.press('right')
+                time.sleep(0.3)
+
+        sleep_time = round(random.randint(660, 900), 2)
+        print("\nNow waiting for {}mins\nThis can differ every harvest\n".format(sleep_time / 60))
+        time.sleep(sleep_time)
 
 
 def collect_resources_on_island(farm_duration):
@@ -54,9 +75,7 @@ def collect_resources_on_island(farm_duration):
     # set img path to desired type of pic
     collect_type = collect_dict[farm_duration]
 
-    print("Please select active Grepolis browser window!")
-
-    time.sleep(3)
+    time.sleep(2)
 
     # press space - to get overview of island
     pyautogui.press('space')
@@ -84,7 +103,7 @@ def collect_resources_on_island(farm_duration):
         time.sleep(round(random.random(), 2) + 0.3)
 
     pyautogui.press('escape')
-    print("Successfully collected resources from villages on this island, boss!")
+    print("Successfully collected resources on this island!")
 
 
 def get_cords_of_btn(btn_picture):
@@ -115,7 +134,7 @@ def get_input_init():
     # Get input from user for type of farming
     collect_type = int(input("What type of computer are you on?\n"
                              "[1]: Faster ... almost instant loading of windows\n"
-                             "[2]: Slower ... VMs or older computers\n"
+                             "[2]: Slower ... VMs or older computers - NOT IMPLEMENTED YET\n"
                              "--->>>\t"))
     return collect_type
 
@@ -130,32 +149,14 @@ def main():
     print("Welcome to GrepoBot!\n")
 
     # Get speed of computer from user
-    collect_duration = get_input_init()
+    # pc_speed = get_input_init()
 
     # Get list of num of cities on each island
     cities_per_island = get_cities()
 
-    collect_resources_on_island(collect_duration)
+    print("Please select active Grepolis browser window!")
+
+    collect_countdown_loop(cities_per_island)
 
 
-"""
-def get_number_of_villages():
-    try:
-        number_of_villages = int(input("Enter amount of your villages: "))
-    except ValueError:
-        print("Enter number!")
-        get_number_of_villages()
-
-    return number_of_villages
-
-
-def get_number_of_farm_villages():
-    try:
-        number_of_farm_villages = int(input("Enter amount of your farm villages: "))
-    except ValueError:
-        print("Enter number!")
-        get_number_of_farm_villages()
-
-    return number_of_farm_villages
-"""
-
+main()
