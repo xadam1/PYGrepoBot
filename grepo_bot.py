@@ -1,6 +1,7 @@
 import pyautogui
 import time
 import random
+import sys
 
 
 def get_cities():
@@ -28,7 +29,7 @@ def get_cities():
             cities_per_island = []
 
         if pressed_key == 'q':
-            print("Ok, thank you!")
+            print("Ok, got your scheme!")
             break
 
         try:
@@ -56,9 +57,17 @@ def collect_countdown_loop(cities_on_island):
                 pyautogui.press('right')
                 time.sleep(0.3)
 
-        sleep_time = round(random.randint(660, 900), 2)
-        print("\nNow waiting for {}mins\nThis can differ every harvest\n".format(sleep_time / 60))
+        sleep_time = round(random.randint(620, 800), 2)
+        print("\nNow waiting for {}mins\nThis can differ every harvest\n".format(
+            sleep_time / 60))
         time.sleep(sleep_time)
+
+        # Minute countdown
+        print("Get ready, starting in 1 minute, please make sure, to put Grepolis on screen!")
+        for i in range(60, 0, -1):
+            print("\t", i, end='\r')
+            time.sleep(1)
+        print()
 
 
 def collect_resources_on_island(farm_duration):
