@@ -3,9 +3,46 @@ import time
 import random
 
 
+def get_cities():
+    island_num = 1
+    print("You will be asked to input number of cities on each of your islands.\n"
+          "GrepoBot needs this information to be able to loop over all villages.\n\n"
+          "If you have no more cities press 'q' to stop this.\n"
+          "And if you fucked up, press 'n'\n")
+
+    cities_per_island = []
+
+    while True:
+        pressed_key = input("Cities on {}. island: \t".format(island_num))
+        island_num += 1
+
+        if pressed_key == 'n':
+            print("Resetting...")
+            # set to 2 bcs except will reduce by 1
+            island_num = 2
+            cities_per_island = []
+
+        if pressed_key == 'q':
+            print("Ok, thank you!")
+            break
+
+        try:
+            count = int(pressed_key)
+            cities_per_island.append(count)
+
+        except ValueError:
+            print("Unknown command! Try again...")
+            island_num -= 1
+
+    return cities_per_island
+
+
+# def collect_countdown_loop(time):
+
+
 def collect_resources_on_island(farm_duration):
     """
-    Loops through each farm village on island, and collect resources from each one of them
+    Loops through each farm village on current island, and collect resources from each one of them
 
     :param farm_duration: int type representing what type of farming should be used
     :return: nothing, collects resources from villages
@@ -76,9 +113,10 @@ def get_input_init():
     :return: int type representing farming mode
     """
     # Get input from user for type of farming
-    collect_type = int(input("What type of farming do you want to start?\n"
-                             "[1]: Short (every 10min)\n"
-                             "[2]: Longer ... not implemented yet ->\t"))
+    collect_type = int(input("What type of computer are you on?\n"
+                             "[1]: Faster ... almost instant loading of windows\n"
+                             "[2]: Slower ... VMs or older computers\n"
+                             "--->>>\t"))
     return collect_type
 
 
@@ -89,10 +127,13 @@ def main():
     :return: not determined yet, probably nothing
     """
 
-    print("Welcome to farming GrepoBot!\n\n")
+    print("Welcome to GrepoBot!\n")
 
-    # Get type of desired farming
+    # Get speed of computer from user
     collect_duration = get_input_init()
+
+    # Get list of num of cities on each island
+    cities_per_island = get_cities()
 
     collect_resources_on_island(collect_duration)
 
@@ -118,4 +159,3 @@ def get_number_of_farm_villages():
     return number_of_farm_villages
 """
 
-main()
