@@ -4,6 +4,20 @@ import random
 import sys
 
 
+def countdown(t):
+    """
+    Simple countdowntimer on 't' amount of seconds
+
+    :return: nothing, prints countdown
+    """
+    while t:
+        mins, secs = divmod(t, 60)
+        timeformat = '{:02d}:{:02d}'.format(mins, secs)
+        print(timeformat, end='\r')
+        time.sleep(1)
+        t -= 1
+
+
 def get_cities():
     """
     Gets input from user - number of cities per each island
@@ -11,7 +25,7 @@ def get_cities():
     :return: list of number of cities per island, each element represents one island
     """
     island_num = 1
-    print("You will be asked to input number of cities on each of your islands.\n"
+    print("\nYou will be asked to input number of cities on each of your islands.\n"
           "GrepoBot needs this information to be able to loop over all villages.\n\n"
           "If you have no more cities press 'q' to stop this.\n"
           "And if you fucked up, press 'n'\n")
@@ -44,12 +58,18 @@ def get_cities():
 
 
 def collect_countdown_loop(cities_on_island):
-    # collect, move to other island, wait 11 mins
+    """
+    10-15 minutes loop collecting resources from all islands
+
+    :return: nothing, collects resources
+    """
+    # create list with btn_collect, btn_next_village
+    btns = []
 
     while True:
         for island in cities_on_island:
             # collect on this island
-            collect_resources_on_island(1)
+            collect_resources_on_island(1, btns)
 
             print("Moving to another island!\n")
             # switch to other island
@@ -57,20 +77,15 @@ def collect_countdown_loop(cities_on_island):
                 pyautogui.press('right')
                 time.sleep(0.3)
 
-        sleep_time = round(random.randint(620, 800), 2)
-        print("\nNow waiting for {}mins\nThis can differ every harvest\n".format(
-            sleep_time / 60))
-        time.sleep(sleep_time)
+        # calculate seconds to wait <10min, 12min>
+        sleep_time = random.randint(600, 700)
 
-        # Minute countdown
-        print("Get ready, starting in 1 minute, please make sure, to put Grepolis on screen!")
-        for i in range(60, 0, -1):
-            print("\t", i, end='\r')
-            time.sleep(1)
+        print("Next collection will happen in:\t")
+        countdown(sleep_time)
         print()
 
 
-def collect_resources_on_island(farm_duration):
+def collect_resources_on_island(farm_duration, buttons):
     """
     Loops through each farm village on current island, and collect resources from each one of them
 
@@ -96,18 +111,24 @@ def collect_resources_on_island(farm_duration):
     pyautogui.click('images/resources.png')
     print("Found village with resources.")
 
-    # Find buttons and save the positions
-    btn_collect = get_cords_of_btn(collect_type)
-    btn_next_village = get_cords_of_btn('images/next_farm_village_button.png')
+    if not buttons:
+        # Find buttons and save the positions
+        btn_collect = get_cords_of_btn(collect_type)
+        btn_next_village = get_cords_of_btn('images/next_farm_village_button.png')
+
+        buttons.append(btn_collect)
+        buttons.append(btn_next_village)
 
     print("Collecting your goodies!")
     for _ in range(6):
-        pyautogui.click(btn_collect)
+        # btn collect
+        pyautogui.click(buttons[0])
 
         # sleeps for (0.3 - 1.3 sec) - rounded random on 2 digits (0.00 - 1.00) + 0.3 sec
         time.sleep(round(random.random(), 2) + 0.3)
 
-        pyautogui.click(btn_next_village)
+        # btn next_village
+        pyautogui.click(buttons[1])
 
         time.sleep(round(random.random(), 2) + 0.3)
 
